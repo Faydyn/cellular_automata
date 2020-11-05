@@ -1,4 +1,5 @@
 import numpy as np
+import time
 from itertools import zip_longest
 
 
@@ -10,7 +11,7 @@ ruledict = {}
 
 def print_ca_state(state):
     def asciiart(c): return square if c else ' '
-    print(''.join([asciiart(x) for x in state]))
+    print(f'|{"".join([asciiart(x) for x in state])}|')
 
 
 # takes a decimal number between 0..255 and returns a dict with each of the 2^3 Possibilities mapped to the result in the next state
@@ -63,6 +64,10 @@ if not is_torus:
 initial_state = np.array([int(elem) for elem in start], dtype=np.bool)
 ruledict = get_rule_dict(rule)
 
-for _ in range(5):
+print(
+    list(zip([f"|{ '|'.join(list(k.replace('0', ' ').replace('1', square))) }|" for k in ruledict.keys()], [square if v else ' ' for v in ruledict.values()])))
+print('\n')
+for _ in range(50000):
     print_ca_state(initial_state)
+    time.sleep(0.016)
     initial_state = simulate_next_state(initial_state, is_torus, default_val)
